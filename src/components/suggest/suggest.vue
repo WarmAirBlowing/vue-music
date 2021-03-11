@@ -95,38 +95,41 @@ export default {
           }
         })
       },
-      listScroll () {
-        this.$emit('listScroll')
-      },
-      selectItem (item) {
-        if (item.type === TYPE_SINGER) {
-          const singer = new Singer({
-            id: item.singermid,
-            name: item.singername
-          })
-          this.$router.push({
-            path: `/search/${singer.id}`
-          })
-          this.setSinger(singer)
-        } else {
-          this.insertSong(item)
-        }
-        this.$emit('select', item)
-      },
-      getDisplayName (item) {
-        if (item.type === TYPE_SINGER) {
-          return item.singername
-        } else {
-          return `${item.name}-${item.singer}`
-        }
-      },
-      getIconCls (item) {
-        if (item.type === TYPE_SINGER) {
-          return 'icon-mine'
-        } else {
-          return 'icon-music'
-        }
-      },
+    listScroll () {
+      this.$emit('listScroll')
+    },
+    selectItem (item) {
+      if (item.type === TYPE_SINGER) {
+        const singer = new Singer({
+          id: item.singermid,
+          name: item.singername
+        })
+        this.$router.push({
+          path: `/search/${singer.id}`
+        })
+        this.setSinger(singer)
+      } else {
+        this.insertSong(item)
+      }
+      this.$emit('select', item)
+    },
+    refresh() {
+      this.$refs.suggest.refresh()
+    },
+    getDisplayName (item) {
+      if (item.type === TYPE_SINGER) {
+        return item.singername
+      } else {
+        return `${item.name}-${item.singer}`
+      }
+    },
+    getIconCls (item) {
+      if (item.type === TYPE_SINGER) {
+        return 'icon-mine'
+      } else {
+        return 'icon-music'
+      }
+    },
     _genResult(data) {
       let ret = []
         if (data.zhida && data.zhida.singerid && this.page === 1) {
@@ -137,31 +140,31 @@ export default {
           return ret
         })
     },
-      _normalizeSongs (list) {
-        let ret = []
-        list.forEach((musicData) => {
-          if (isValidMusic(musicData)) {
-            ret.push(createSong(musicData))
-          }
-        })
-        return ret
-      },
-      _checkMore (data) {
-        const song = data.song
-        if (!song.list.length || (song.curnum + (song.curpage - 1) * perpage) >= song.totalnum) {
-          this.hasMore = false
-        } else {
-          if (!this.$refs.suggest.scroll.hasVerticalScroll) {
-            this.searchMore()
-          }
+    _normalizeSongs (list) {
+      let ret = []
+      list.forEach((musicData) => {
+        if (isValidMusic(musicData)) {
+          ret.push(createSong(musicData))
         }
-      },
-      ...mapMutations({
-        setSinger: 'SET_SINGER'
-      }),
-      ...mapActions([
-        'insertSong'
-      ])
+      })
+      return ret
+    },
+    _checkMore (data) {
+      const song = data.song
+      if (!song.list.length || (song.curnum + (song.curpage - 1) * perpage) >= song.totalnum) {
+        this.hasMore = false
+      } else {
+        if (!this.$refs.suggest.scroll.hasVerticalScroll) {
+          this.searchMore()
+        }
+      }
+    },
+    ...mapMutations({
+      setSinger: 'SET_SINGER'
+    }),
+    ...mapActions([
+      'insertSong'
+    ])
   },
   watch: {
     // 监听检索词的变化

@@ -48,7 +48,7 @@ export default {
           // console.log(res.data.list);
           processSongsUrl(this._normalizeSongs(res.data.list)).then((songs) => {
             this.songs = songs
-            console.log(this.songs);
+            // console.log(this.songs);
           })
         }
       })

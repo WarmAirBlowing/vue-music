@@ -5,7 +5,7 @@
       <search-box ref="searchBox" @query="onQueryChange"></search-box>
     </div>
     <!-- 热门搜索词区域 -->
-    <div ref="shortcut-wrapper" class="shortcut-wrapper" v-show="!query">
+    <div ref="shortcutWrapper" class="shortcut-wrapper" v-show="!query">
       <scroll :refreshDelay="refreshDelay" ref="shortcut" class="shortcut" :data="shortcut">
         <div>
           <div class="hot-key">
@@ -29,7 +29,7 @@
       </scroll>
     </div>
     <!-- 搜索结果 -->
-    <div class="search-result" v-show="query">
+    <div class="search-result" v-show="query" ref="searchResult">
       <suggest @select="saveSearch" @listScroll="blurInput" :query="query" ref="suggest"></suggest>
     </div>
 
@@ -46,18 +46,23 @@ import Suggest from '@/components/suggest/suggest'
 import { mapActions, mapGetters } from 'vuex'
 import Scroll from '@/base/scroll/scroll'
 import SearchList from '@/base/search-list/search-list'
-// import Confirm from '@/base/confirm/confirm'
+import Confirm from '@/base/confirm/confirm'
+import { playlistMixin } from '@/common/js/mixin'
+
 export default {
+  mixins: [playlistMixin],
   components: {
     SearchBox,
     Suggest,
     Scroll,
-    SearchList
+    SearchList,
+    Confirm
   },
   data() {
     return {
       hotKey: [], // 保存热门搜索词
-      query: ''
+      query: '',
+      refreshDelay: 120
     }
   },
   created() {
@@ -69,7 +74,6 @@ export default {
     },
     ...mapGetters([
       'searchHistory',
-      'deleteSearchHistory'
     ])
   },
   methods: {
@@ -107,8 +111,19 @@ export default {
       this.$refs.confirm.show()
     },
     ...mapActions([
-      'saveSearchHistory'
+      'saveSearchHistory',
+      'deleteSearchHistory',
+      'clearSearchHistory'
     ])
+  },
+  watch: {
+    query (newQuery) {
+      if (!newQuery) {
+        setTimeout(() => {
+          this.$refs.shortcut.refresh()
+        }, 20)
+      }
+    }
   }
 }
 </script>
