@@ -1,4 +1,4 @@
-import state from "./state"
+import Song from 'common/js/song'
 
 export const singer = state => state.singer
 

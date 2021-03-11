@@ -5,7 +5,6 @@
     <router-link to="/user" class="mine" tag="div">
       <i class="icon-mine"></i>
     </router-link>
-    <router-view></router-view>
   </div>
 </template>
 

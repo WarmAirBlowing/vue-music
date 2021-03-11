@@ -74,7 +74,7 @@
               <i @click="next" class="icon-next"></i>
             </div>
             <div class="icon i-right">
-              <i class="icon icon-not-favorite"></i>
+              <i class="icon" @click="toggleFavorite(currentSong)" :class="getFavoriteIcon(currentSong)"></i>
             </div>
           </div>
         </div>
@@ -119,11 +119,14 @@ import Lyric from 'lyric-parser' // 用来解析歌词
 import Scroll from '@/base/scroll/scroll'
 import { prefixStyle } from '@/common/js/dom'
 import Playlist from '@/components/playlist/playlist'
+import { playerMixin } from '@/common/js/mixin'
+
 
 const transform = prefixStyle('transform')
 const transitionDuration = prefixStyle('transitionDuration')
 
 export default {
+  mixins: [playerMixin],
   data() {
     return {
       songReady: false,
