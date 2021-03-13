@@ -58,7 +58,6 @@ export default {
   computed: {
     noResult () {
       if (this.currentIndex === 0) {
-        
         return !this.favoriteList.length
       } else {
         return !this.playHistory.length
