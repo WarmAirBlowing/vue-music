@@ -60,7 +60,7 @@ export default {
       if (this.currentIndex === 0) {
         return !this.favoriteList.length
       } else {
-        return !this.playH istory.length
+        return !this.playHistory.length
       }
     },
     noResultDesc () {
